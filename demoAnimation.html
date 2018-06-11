@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+    </head>
+    <body>
+
+<canvas id="surface" width="600" height="400"
+  style="border: 1px solid gray"></canvas>
+
+<div id="debug">...</div>
+<script>
+
+var ball = {
+  x: 50,
+  y: 150,
+  vx: 2,
+  vy: 3,
+  r: 10
+}
+
+var keyFlag = "none";
+
+var ctx = surface.getContext("2d");
+
+setInterval(function () {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+    ctx.fillRect(0, 0, surface.width, surface.height);
+    
+    // update
+    // hit bottom or user want ball go up
+    if (ball.y + ball.r >= surface.height || keyFlag == "up") {
+        ball.vy = -1 * Math.abs(ball.vy);
+    }
+    // hit top or user want ball go down:
+    if (ball.y - ball.r <= 0 || keyFlag == "down") {
+        ball.vy = Math.abs(ball.vy);
+    }
+    // hit right:
+    if (ball.x + ball.r >= surface.width || keyFlag == "left") {
+        ball.vx = -1 * Math.abs(ball.vx);
+    }
+    // hit left:
+    if (ball.x - ball.r <= 0 || keyFlag == "right") {
+        ball.vx = Math.abs(ball.vx);
+    }
+    keyFlag = "none";
+
+    ball.x = ball.x + ball.vx;
+    ball.y = ball.y + ball.vy;
+    
+    // draw
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI);
+    ctx.strokeStyle = "white";
+    ctx.stroke();
+
+}, 1000 / 24)
+
+
+document.onkeydown = function () {
+    switch (event.keyCode) {
+        case 37: // left
+           // ball.vx = -1 * Math.abs(ball.vx);
+           keyFlag = "left";
+           break;
+        case 38:
+           // ball.vy = -1 * Math.abs(ball.vy);
+           keyFlag = "up";
+           break;
+        case 39:
+           // ball.vx = Math.abs(ball.vx);
+           keyFlag = "right";
+           break;
+        case 40:
+           // ball.vy = Math.abs(ball.vy);
+           keyFlag = "down";
+           break;
+        default:
+           keyFlag = "none";
+           break;
+    }
+    
+    
+}
+
+
+</script>
+</body>
+</html>
